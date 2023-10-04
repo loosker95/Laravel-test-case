@@ -1,7 +1,7 @@
 ## My list of most use assert function
 
 -   assertStatus - 200 can be custumize to any http code
--   assertOk(); - 200
+-   assertOk() - 200
 -   assertCreated - 201
 -   assertUnauthorized() - 401
 -   assertNotFound() - 404

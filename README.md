@@ -1,4 +1,4 @@
-## My list of most use test function
+## My list of most use assert function
 
 -   assertStatus - 200 can be custumize to any http code
 -   assertOk(); - 200

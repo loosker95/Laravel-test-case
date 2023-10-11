@@ -15,8 +15,8 @@ class AppTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create();
         $this->withoutVite();
+        $this->user = User::factory()->create();
     }
 
     public function test_Home_page_load_properly(): void

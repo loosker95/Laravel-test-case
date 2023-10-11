@@ -16,6 +16,7 @@ class AppTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create();
+        $this->withoutVite();
     }
 
     public function test_Home_page_load_properly(): void

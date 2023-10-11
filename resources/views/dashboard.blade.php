@@ -6,12 +6,14 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto py-5 sm:px-6 lg:px-8">
-        @if (Auth::user()->isAdmin)
+        {{-- @if (Auth::user()->isAdmin) --}}
+        @can('can-add-post')
             <a href="{{ route('create.post') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 Create post
             </a>
-        @endif
+        @endcan
+        {{-- @endif --}}
     </div>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -24,6 +26,9 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">
+                        ID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Title
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -35,17 +40,24 @@
                     <th scope="col" class="px-6 py-3">
                         Status
                     </th>
-                    <th scope="col" class="px-6 py-3" colspan="2">
-                        Action
-                    </th>
+                    @can('can-edit')
+                        <th scope="col" class="px-6 py-3" colspan="2">
+                            Action
+                        </th>
+                    @endcan
                 </tr>
             </thead>
             <tbody>
                 @forelse ($posts as $post)
                     <tr class="bg-white border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ $post->title }}
-                            </td>
+                        <td class="px-6 py-4">
+                            {{ $post->id }}
+                        </td>
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <a href="{{ route('show.post', $post->id) }}">
+                                {{ $post->title }}
+                            </a>
+                        </td>
                         <td class="px-6 py-4">
                             {{ $post['user']->name }}
                         </td>
@@ -55,17 +67,18 @@
                         <td class="px-6 py-4">
                             {{ $post['user']->isAdmin == 0 ? 'User' : 'Admin' }}
                         </td>
-                        <td class="px-6 py-4">
-                            @if (Auth::user()->id == $post->user_id)
+                        @can('can-edit')
+                            <td class="px-6 py-4">
+                                {{-- @if (Auth::user()->id == $post->user_id) --}}
                                 <a href="{{ route('edit.post', $post->id) }}" style="color: blue">
                                     Edit
                                 </a>
-                            @else
+                                {{-- @else
                                 Edit
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            @if (Auth::user()->id == $post->user_id)
+                            @endif --}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{-- @if (Auth::user()->id == $post->user_id) --}}
                                 <form action="{{ route('destroy.post', $post->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
@@ -73,10 +86,11 @@
                                         Delete
                                     </button>
                                 </form>
-                            @else
+                                {{-- @else
                                 Delete
-                            @endif
-                        </td>
+                            @endif --}}
+                            </td>
+                        @endcan
                     </tr>
                 @empty
                     <td class="text-base py-4">

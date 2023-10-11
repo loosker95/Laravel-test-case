@@ -6,12 +6,12 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Gate;
 
 
 class MainController extends Controller
 {
     public function index(){
-
         $data = Post::with('user')->orderByDesc('id')->paginate(10);
         return view('dashboard')->with('posts',$data);
     }
@@ -21,15 +21,19 @@ class MainController extends Controller
     }
 
     public function store(PostRequest $request){
-
-        $data = Post::create([
-            'user_id' => User::InRandomOrder()->first()->id,
-            'title' => $request->title,
-            'summary' => $request->summary,
-            'body' => $request->body,
-        ]);
-
+        Post::create([
+            'user_id' => User::inRandomOrder()->first()->id,
+        ] + $request->validated());
         return back()->with('success', 'Post submit succesfully');
+    }
+
+    public function show($id){
+        $data = Post::with('user')->find($id);
+        if(!$data){
+            return abort(404);
+        }
+
+        return view('pages.show')->with('post', $data);
     }
 
     public function edit($id){
@@ -37,6 +41,10 @@ class MainController extends Controller
         if(!$data){
             return abort(404);
         }
+        if (!Gate::allows('can-edit')) {
+            abort(403);
+        }
+
         return view('pages.edit')->with('post', $data);
     }
 
@@ -50,7 +58,7 @@ class MainController extends Controller
             return back()->with('error', 'No fields has been updated :( ');
         }
 
-        Post::where('id', $id)->update($updateData); 
+        Post::where('id', $id)->update($updateData);
         return back()->with('success', 'Post updated succesfully');
     }
 

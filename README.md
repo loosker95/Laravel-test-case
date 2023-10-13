@@ -19,7 +19,11 @@
 -   assertUnauthorized() - 401
 -   assertUnprocessable() - 401
 
+### --
+
 -   assertInstanceOf - to check if the correct data is being return
+
+### --
 
 -   StringMatchesFormatTest()
 -   assertStringContainsString()
@@ -35,8 +39,16 @@
 -   assertJsonMissingPath
 -   assertJsonMissing - // can be use after update and delete method
 
+### --
+
 -   assertModelExists
 -   assertModelMissing
+
+### For Exceptions
+
+-   expectException()
+
+### --
 
 -   assertRedirect
 -   assertSuccessful
@@ -46,9 +58,13 @@
 -   assertModelExists
 -   assertEquals
 
+### --
+
 -   assertDatabaseHas
 -   assertDatabaseMissing
 -   assertDatabaseCount
+
+### --
 
 -   assertCount
 -   assertViewHas

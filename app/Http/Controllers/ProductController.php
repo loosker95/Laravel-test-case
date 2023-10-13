@@ -2,59 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
     public function index(){
         $products = Product::all();
-        return response()->json([
-            'data' => $products
-        ]);
+        return response()->json(['data' => $products]);
     }
 
-    public function store(Request $request){
-        $data = Product::create([
-            'name' => $request->name,
-            'price' => $request->price,
-        ]);
+    public function store(ProductRequest $request){
+        try{
+            $data = Product::create($request->validated());
+        }catch(ValidationException $e){
+            return response()->json($e->errors(), 422);
+        }
 
-        return response()->json([
-            'data' => $data
-        ], 201);
+        return response()->json(['data' => $data], 201);
     }
 
     public function show($id){
         $data = Product::find($id);
         if(!$data){
-            return response()->json([
-                'message' => 'No data has found for id '.$id
-            ]);
+            return response()->json(['message' => 'No data has found for id '.$id]);
         }
-        return response()->json([
-            'data' => $data
-        ]);
+        return response()->json(['data' => $data]);
     }
 
-    public function update(Request $request, $id){
-        $product = Product::find($id);
-        $product->update([
-            'name' => $request->name,
-            'price' => $request->price,
-        ]);
-
-        return response()->json([
-            'data' => $product
-        ]);
+    public function update(ProductRequest $request, $id){
+        try{
+            $product = Product::find($id);
+            $product->update($request->validated());
+        }catch(ValidationException $e){
+            return response()->json($e->errors(), 422);
+        }
+        return response()->json(['data' => $product]);
     }
 
     public function destroy($id){
         $product = Product::find($id);
+        if(!$product){
+            return response()->json(['message' => 'No data has found for id '.$id]);
+        }
         $product->delete();
 
-        return response()->json([
-            'message' => 'Product deleted successfully'
-        ], 200);
+        return response()->json(['message' => 'Product deleted successfully'], 200);
     }
 }

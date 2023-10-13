@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Gate;
 class MainController extends Controller
 {
     public function index(){
+        return view('index');
+    }
+
+    public function list(){
         $data = Post::with('user')->orderByDesc('id')->paginate(10);
         return view('dashboard')->with('posts',$data);
     }

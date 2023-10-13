@@ -14,9 +14,7 @@ use App\Http\Controllers\MainController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'index'])->name('home');
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
     Route::controller(MainController::class)->group(function(){
@@ -30,7 +28,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         Route::get('/post/{id}/edit', 'edit')->name('edit.post');
         Route::put('/update/{id}', 'update')->name('update.post');
         Route::delete('/delete/{id}', 'destroy')->name('destroy.post');
-        Route::get('/dashboard', 'index')->name('dashboard');
+        Route::get('/dashboard', 'list')->name('dashboard');
     });
 });
 

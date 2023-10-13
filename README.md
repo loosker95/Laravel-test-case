@@ -1,13 +1,17 @@
 ## My list of most use assert function
 
+### Basic
+
 -   assertSee
 -   assertSeeText - // more accurate then assertSee
 -   assertDontSee
 -   assertSeeInOrder([])
 
+### --
+
 -   assertStatus - 200 can be custumize to any http code
 
-#### Those can be use as alternative for assertStatus(xxx)
+### Those can be use as alternative for assertStatus(xxx)
 
 -   assertOk() - 200
 -   assertSuccessful() - 2xx

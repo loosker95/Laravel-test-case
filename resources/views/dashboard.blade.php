@@ -100,6 +100,33 @@
             </tbody>
         </table>
 
+        <style>
+            /* .relative {
+                height: 40px;
+                margin: 2px;
+                border-radius: 30px;
+                border: none;
+                box-shadow: none;
+            } */
+
+            .relative {
+                height: 40px;
+                margin: 2px;
+                border-radius: 30px;
+                border: none;
+                box-shadow: none;
+                color: blue;
+            }
+
+            .relative span {
+                height: 40px;
+                margin: 2px;
+                color: gray;
+                border-radius: 30px;
+                border: none;
+            }
+        </style>
+
         <div class="py-10">
             {{ $posts->links() }}
         </div>

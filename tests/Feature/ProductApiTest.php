@@ -12,25 +12,29 @@ class ProductApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Product $product;
+
+    public function setUp():void{
+        parent::setUp();
+        $this->product = Product::factory()->create();
+    }
 
     public function test_product_api_get_data_successfully(){
-        $products = Product::factory()->create();
         $response = $this->getJson(route('product.index'));
 
         $response->assertOk();
         $response->assertSuccessful();
         $response->assertJsonFragment([
-            'name' => $products->name,
-            'price' => $products->price,
+            'name' => $this->product->name,
+            'price' => $this->product->price,
         ]);
         $response->assertJsonCount(1, 'data');
     }
 
     public function test_api_product_store_successflly(){
-        $post = Product::factory()->create();
         $data = [
-            'name' => $post->name,
-            'price' => $post->price,
+            'name' => $this->product->name,
+            'price' => $this->product->price,
         ];
         $response = $this->postJson(route('product.create'), $data);
 
@@ -41,13 +45,11 @@ class ProductApiTest extends TestCase
     }
 
     public function test_get_one_product_by_id_successfully(){
-
-        $post = Product::factory()->create();
-        $response = $this->getJson(route('product.show', $post->id));
+        $response = $this->getJson(route('product.show', $this->product->id));
 
         $response->assertOk();
-        $response->assertJsonPath('data.name', $post->name);
-        $response->assertJsonPath('data.price', $post->price);
+        $response->assertJsonPath('data.name', $this->product->name);
+        $response->assertJsonPath('data.price', $this->product->price);
         // $response->assertJsonMissingPath()
         $response->assertJsonStructure([
             "data" => [
@@ -56,6 +58,12 @@ class ProductApiTest extends TestCase
                 "price",
             ]
         ]);
+    }
+
+    public function test_get_one_product_by_id_show_exption(){
+        $response = $this->getJson(route('product.show', ['id'=> 888]));
+        $response->assertStatus(422);
+        $this->assertEquals('Id not found', $response['message']);
     }
 
     public function test_product_has_been_updated_successfully(){
@@ -74,10 +82,10 @@ class ProductApiTest extends TestCase
     }
 
     public function test_product_can_be_deleted_succesfully(){
-        $product = Product::factory()->create();
-        $response = $this->deleteJson(route('product.delete', $product->id));
+        // $this->markTestSkipped('can add custom messge');
+        $response = $this->deleteJson(route('product.delete', $this->product->id));
         $response->assertOk();
-        $response->assertJsonMissing($product->toArray());
-        $this->assertDatabaseMissing('products', ['id' => $product->id]);
+        $response->assertJsonMissing($this->product->toArray());
+        $this->assertDatabaseMissing('products', ['id' => $this->product->id]);
     }
 }

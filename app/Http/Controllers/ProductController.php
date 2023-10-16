@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreateProductEvent;
+use App\Exceptions\IdNotFoundException;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -24,10 +27,11 @@ class ProductController extends Controller
         return response()->json(['data' => $data], 201);
     }
 
-    public function show($id){
-        $data = Product::find($id);
-        if(!$data){
-            return response()->json(['message' => 'No data has found for id '.$id]);
+    public function show(ProductService $productService, $id){
+        try{
+            $data = $productService->getOneById($id);
+        }catch(IdNotFoundException $e){
+            return response()->json(['message' => $e->getMessage()], 422);
         }
         return response()->json(['data' => $data]);
     }

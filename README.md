@@ -29,10 +29,22 @@
 
 ### --
 
+-   assertDispatched - // Test Job, Event
+-   assertSent - // Test Mail
+-   assertSentTo - // Test notification
+-   assertListening - // Test if event has attached to listener
+
+### --
+
 -   StringMatchesFormatTest()
 -   assertStringContainsString()
 -   assertStarstWith()
 -   assertEndsWith()
+
+### --
+
+-   assertNull
+-   assertNotNull
 
 ### For Api
 

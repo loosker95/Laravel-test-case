@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreatePostEvent;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 
 class MainController extends Controller
@@ -25,9 +28,14 @@ class MainController extends Controller
     }
 
     public function store(PostRequest $request){
-        Post::create([
+        $data = Post::create([
             'user_id' => User::inRandomOrder()->first()->id,
+            'summary' => fake()->realText(),
+            'body' => fake()->realText($minNbChars = 1000, $indexSize = 2),
         ] + $request->validated());
+
+        event(new CreatePostEvent($data));
+
         return back()->with('success', 'Post submit succesfully');
     }
 

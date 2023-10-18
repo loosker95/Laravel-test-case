@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CreateProductEvent;
-use App\Exceptions\IdNotFoundException;
-use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use App\services\ProductService;
 use Illuminate\Http\Request;
+use App\services\ProductService;
+use App\Http\Requests\ProductRequest;
+use App\Exceptions\IdNotFoundException;
+use App\Http\Resources\ProductResource;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function index(): ProductResource{
+
         $products = Product::all();
-        return response()->json(['data' => $products]);
+        return ProductResource::make($products);
+        // return ProductResource::collection($products);
     }
 
     public function store(ProductRequest $request){

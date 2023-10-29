@@ -8,6 +8,7 @@ Route::controller(ProductController::class)
 ->prefix('v1')
 ->name('product.')
 ->group(function(){
+    // Route::get('/products', 'index')->name('index')->middleware('throttle:3,60');
     Route::get('/products', 'index')->name('index');
     Route::post('/products', 'store')->name('create');
     Route::get('/products/{id}', 'show')->name('show');

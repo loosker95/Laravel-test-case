@@ -17,6 +17,7 @@ class ProductController extends Controller
         $products = Product::all();
         return ProductResource::make($products);
         // return ProductResource::collection($products);
+        // return new ProductResource($products);
     }
 
     public function store(ProductRequest $request){
